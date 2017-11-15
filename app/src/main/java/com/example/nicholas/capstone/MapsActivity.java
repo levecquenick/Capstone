@@ -28,6 +28,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 
 import org.json.JSONObject;
 
@@ -103,8 +104,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onMapClick(LatLng point) {
 
-                // Already two locations
-                if (MarkerPoints.size() > 1) {
+                // if there is a set destination already
+                if (MarkerPoints.size() == 1) {
                     MarkerPoints.clear();
                     mMap.clear();
                 }
@@ -119,23 +120,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 options.position(point);
 
                 /**
-                 * For the start location, the color of marker is GREEN and
-                 * for the end location, the color of marker is RED.
+                 * make the marker green cuz why not. I kinda like green
                  */
-                if (MarkerPoints.size() == 1) {
                     options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-                } else if (MarkerPoints.size() == 2) {
-                    options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-                }
 
 
                 // Add new marker to the Google Map Android API V2
                 mMap.addMarker(options);
 
                 // Checks, whether start and end locations are captured
-                if (MarkerPoints.size() >= 2) {
-                    LatLng origin = MarkerPoints.get(0);
-                    LatLng dest = MarkerPoints.get(1);
+                if (MarkerPoints.size() >= 1) {
+                    LatLng origin = mCurrLocationMarker.getPosition();
+                    LatLng dest = MarkerPoints.get(0);
 
                     // Getting URL to the Google Directions API
                     String url = getUrl(origin, dest);
@@ -149,6 +145,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
                 }
 
+            }
+        });
+
+        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener(){
+
+            @Override
+            public void onMapLongClick(LatLng latLng) {
+                mMap.clear();
             }
         });
 
