@@ -2,6 +2,7 @@ package com.example.nicholas.capstone;
 
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
