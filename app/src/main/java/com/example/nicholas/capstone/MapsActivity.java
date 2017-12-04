@@ -143,7 +143,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     FetchUrl.execute(url);
                     //move map camera
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(origin));
-                    mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
+                    //mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
                 }
 
             }
@@ -170,9 +170,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // Sensor enabled
         String sensor = "sensor=false";
+        String mode = "walking";
 
         // Building the parameters to the web service
-        String parameters = str_origin + "&" + str_dest + "&" + sensor;
+        String parameters = str_origin + "&" + str_dest + "&" + sensor + "&" + "mode=walking";
 
         // Output format
         String output = "json";

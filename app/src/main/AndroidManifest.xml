@@ -30,7 +30,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".indoorStuff"
+            android:name=".MapsActivity"
             android:label="capstone">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
