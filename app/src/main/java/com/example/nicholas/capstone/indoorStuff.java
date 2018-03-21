@@ -17,11 +17,16 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import static android.net.wifi.WifiManager.*;
+
 
 public class indoorStuff extends AppCompatActivity {
-
+        double signalLevel;
+        double frequency;
+        double result;
         @Override
         protected void onCreate(Bundle savedInstanceState) {
+
             super.onCreate(savedInstanceState);
             setContentView(R.layout.content_main);
 
@@ -39,8 +44,24 @@ public class indoorStuff extends AppCompatActivity {
             String scanResultsClose = String.valueOf(wifiManager.getScanResults().get(0) + "\n" +
                     wifiManager.getScanResults().get(1) + "\n" +
                     wifiManager.getScanResults().get(2));
-            accessPointInfo.setText(scanResultsClose);
+
+            signalLevel = wifiManager.getScanResults().get(0).level;
+            frequency = wifiManager.getScanResults().get(0).frequency;
+
+            result = calculateDistance(signalLevel, frequency);
+
+
+            accessPointInfo.setText(String.valueOf(result));
+
+
         }
+
+    public double calculateDistance(double signalLevelInDb, double freqInMHz) {
+        double exp = (27.55 - (20 * Math.log10(freqInMHz)) + Math.abs(signalLevelInDb)) / 20.0;
+        return Math.pow(10.0, exp);
+    }
+
+
     }
 
 

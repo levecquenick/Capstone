@@ -70,6 +70,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
     }
 
     /**
@@ -97,6 +98,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         else {
             buildGoogleApiClient();
             mMap.setMyLocationEnabled(true);
+
         }
 
         // Setting onclick event listener for the map
@@ -143,7 +145,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     FetchUrl.execute(url);
                     //move map camera
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(origin));
-                    //mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
+                    //mMap.animateCamera(CameraUpdateFactory.zoomTo(4));
                 }
 
             }
