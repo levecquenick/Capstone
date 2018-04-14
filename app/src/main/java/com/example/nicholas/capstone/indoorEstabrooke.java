@@ -3,6 +3,7 @@ package com.example.nicholas.capstone;
 import android.*;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiInfo;
@@ -13,7 +14,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 
@@ -39,45 +39,9 @@ public class indoorEstabrooke extends AppCompatActivity {
                     .getSystemService(Context.WIFI_SERVICE);
             TextView accessPointInfo = (TextView) findViewById(R.id.textView);
 
+
+
             setUpEverything();
-
-
-
-
-
-
-
-
-
-
-
-
-            /*if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (ContextCompat.checkSelfPermission(this,
-                        android.Manifest.permission.ACCESS_FINE_LOCATION)
-                        == PackageManager.PERMISSION_GRANTED) {
-                    wifiManager.getScanResults();
-                }
-            }
-
-            String scanResultsClose = " ";
-
-
-                for (int i = 0; i < wifiManager.getScanResults().size(); i++) {
-
-                    String BSSID = String.valueOf(wifiManager.getScanResults().get(i).BSSID);
-                    if (BSSID.contains(accessPoint1BSSID) || BSSID.contains(accessPoint2BSSID) || BSSID.contains(accessPoint3BSSID)){
-                        scanResultsClose += String.valueOf(wifiManager.getScanResults().get(i) + "\n" +
-                                calculateDistance(wifiManager.getScanResults().get(i).level, wifiManager.getScanResults().get(i).frequency)) + "\n";
-                    }
-
-                }
-
-
-
-                accessPointInfo.setText(String.valueOf(scanResultsClose));
-                */
-
 
 
         }
@@ -89,15 +53,15 @@ public class indoorEstabrooke extends AppCompatActivity {
         return Math.pow(10.0, exp);
     }
 
-    public void updateDistances(){
-
-    }
 
     public void setUpEverything(){
         WifiManager wifiManager = (WifiManager) getApplicationContext()
                 .getSystemService(Context.WIFI_SERVICE);
         TextView accessPointInfo = (TextView) findViewById(R.id.textView);
         Button updateDistances = (Button) findViewById(R.id.button6);
+        final Button switchActivity = (Button) findViewById(R.id.button2);
+
+
 
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -116,15 +80,26 @@ public class indoorEstabrooke extends AppCompatActivity {
             }
         });
 
+        switchActivity.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                switchActivity();
+            }
+        });
+
         String scanResultsClose = " ";
+
+        double distance;
 
 
         for (int i = 0; i < wifiManager.getScanResults().size(); i++) {
+            distance = calculateDistance(wifiManager.getScanResults().get(i).level, wifiManager.getScanResults().get(i).frequency);
 
             String BSSID = String.valueOf(wifiManager.getScanResults().get(i).BSSID);
             if (BSSID.contains(accessPoint1BSSID) || BSSID.contains(accessPoint2BSSID) || BSSID.contains(accessPoint3BSSID)){
                 scanResultsClose += String.valueOf(wifiManager.getScanResults().get(i) + "\n" +
-                        calculateDistance(wifiManager.getScanResults().get(i).level, wifiManager.getScanResults().get(i).frequency)) + "\n";
+                        convertLatLong(distance)+ "\n"+ distance) + "\n";
             }
 
         }
@@ -133,6 +108,17 @@ public class indoorEstabrooke extends AppCompatActivity {
 
         accessPointInfo.setText(String.valueOf(scanResultsClose));
     }
+
+    public void switchActivity(){
+        Intent intent = new Intent(this, indoorBoardman.class);
+        startActivity(intent);
+    }
+
+    public double convertLatLong(double distance){
+        double latLong = distance/30.8;
+        return latLong;
+    }
+
 
 
 
