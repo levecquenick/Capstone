@@ -24,36 +24,80 @@ class wayPoint{
     Needs:
     location
     list of connected waypoints
+    list of connected classrooms
      */
-    public double locationLat;
-    public double locationLong;
-    public wayPoint[] connected;
+    public float xPos;
+    public float yPos;
+    public ArrayList<wayPoint> connectedPoints = new ArrayList<wayPoint>();
+    public ArrayList<classroom> connectedRooms = new ArrayList<classroom>();
+    public boolean visited = false;
 
-    public wayPoint(double lat, double longitude, wayPoint[] connectedPoints ){
-        locationLat = lat;
-        locationLong = longitude;
-        connected = connectedPoints;
+    public wayPoint(float locX, float locY){
+        xPos = locX;
+        yPos = locY;
+    }
+
+    public void addConnectedRoom(classroom room){
+        this.connectedRooms.add(room);
+    }
+    public void addConnectedWaypoint(wayPoint point){
+        this.connectedPoints.add(point);
+    }
+
+
+
+    public float getXPos(){
+        return this.xPos;
+    }
+    public float getYPos(){
+        return this.yPos;
+    }
+
+    public ArrayList<classroom> getConnectedRooms(){
+        return this.connectedRooms;
+    }
+
+    public ArrayList<wayPoint> getConnectedPoints(){
+        return this.connectedPoints;
+    }
+
+    public void visit(){
+        this.visited = true;
+    }
+
+    public boolean isVisited(){
+        return visited;
+    }
+
+    public void addConnectedClassroom(classroom room){
+        connectedRooms.add(room);
     }
 }
 
-/*
-Class that will handle the edges
-that connect each waypoint
-to each other
- */
-class Edge{
+class classroom{
+
     /*
     constructor
-    takes in 2 waypoints and the distance between them
+    Needs:
+    location
+    room number
      */
-    public double distance;
-    public wayPoint pointA;
-    public wayPoint pointB;
+    float posX;
+    float posY;
+    String roomNum;
+    public classroom(float locX, float locY, String roomID){
+        posX = locX;
+        posY = locY;
+        roomNum = roomID;
+    }
 
-    public Edge(wayPoint point1, wayPoint point2, double distance){
-        distance = distance;
-        pointA = point1;
-        pointB = point2;
+    public float getXPosition(){
+        return this.posX;
+    }
 
+    public float getYPosition(){
+        return this.posY;
     }
 }
+
+

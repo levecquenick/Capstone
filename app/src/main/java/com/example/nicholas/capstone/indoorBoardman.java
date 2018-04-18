@@ -19,6 +19,7 @@ import android.widget.TextView;
 import java.lang.Math;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.net.wifi.WifiManager.*;
@@ -26,18 +27,44 @@ import static java.lang.Math.round;
 
 
 public class indoorBoardman extends AppCompatActivity {
+    public wayPoint basementPoint1 = new wayPoint(66,540);
+    public wayPoint basementPoint2 = new wayPoint(340, 540);
+    public wayPoint basementPoint3 = new wayPoint(340, 130);
+
+    classroom room01 = new classroom(66, 540, "room01");
+    classroom room02 = new classroom(66, 460, "room08");
+    classroom room03 = new classroom(160, 540, "room18");
+    classroom room04 = new classroom(160, 540, "room09");
+    classroom room05 = new classroom(275, 540, "room15");
+    classroom room06 = new classroom(340, 495, "room25");
+    classroom room07 = new classroom(340, 400, "room26");
+    classroom room08 = new classroom(340, 400, "room29");
+    classroom room09 = new classroom(340, 305, "room30");
+    classroom room10 = new classroom(340, 275, "room32");
+    classroom room11 = new classroom(340, 205, "room34");
+    classroom room12 = new classroom(340, 540, "room17");
+    classroom room13 = new classroom(375, 130, "room40");
+    ArrayList<wayPoint> basementWaypoints = new ArrayList<wayPoint>();
+
+
+
+
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        basementWaypoints.add(basementPoint1);
+        basementWaypoints.add(basementPoint2);
+        basementWaypoints.add(basementPoint3);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_main);
 
         WifiManager wifiManager = (WifiManager) getApplicationContext()
                 .getSystemService(Context.WIFI_SERVICE);
-        TextView accessPointInfo = (TextView) findViewById(R.id.textView);
-        final Button switchActivity = (Button) findViewById(R.id.button2);
+        TextView accessPointInfo = findViewById(R.id.textView);
+        final Button switchActivity = findViewById(R.id.button2);
 
 
 
@@ -101,5 +128,7 @@ public class indoorBoardman extends AppCompatActivity {
 
 
 }
+
+
 
 
