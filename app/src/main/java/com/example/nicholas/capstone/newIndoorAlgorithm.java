@@ -31,13 +31,30 @@ class wayPoint{
      */
     public float xPos;
     public float yPos;
+    public int waypointId;
+    public String waypointName;
     public ArrayList<wayPoint> connectedPoints = new ArrayList<wayPoint>();
     public ArrayList<classroom> connectedRooms = new ArrayList<classroom>();
     public boolean visited = false;
 
-    public wayPoint(float locX, float locY){
+    public wayPoint(float locX, float locY, int id, String name){
         xPos = locX;
         yPos = locY;
+        waypointId = id;
+        waypointName = name;
+
+    }
+
+    public wayPoint(){
+
+    }
+
+    public void setId(int id){
+        this.waypointId = id;
+    }
+
+    public int getID(){
+        return this.waypointId;
     }
 
 
@@ -53,6 +70,21 @@ class wayPoint{
     }
     public float getYPos(){
         return this.yPos;
+    }
+
+    public void setxPos(float xPos){
+        this.xPos = xPos;
+    }
+    public void setyPos(float yPos){
+        this.yPos = yPos;
+    }
+
+    public void setWaypointName(String name){
+        this.waypointName = name;
+    }
+
+    public String getWaypointName(){
+        return this.waypointName;
     }
 
     public ArrayList<classroom> getConnectedRooms(){
@@ -73,6 +105,14 @@ class wayPoint{
 
     public void addConnectedClassroom(classroom room){
         connectedRooms.add(room);
+    }
+
+    public void setConnectedRooms(ArrayList<classroom> rooms){
+        this.connectedRooms = rooms;
+    }
+
+    public void setConnectedPoints(ArrayList<wayPoint> points){
+        this.connectedPoints = points;
     }
 }
 
@@ -101,6 +141,10 @@ class classroom{
 
     public void setRoomId(int id){
         this.roomId = id;
+    }
+
+    public int getRoomId(){
+        return this.roomId;
     }
     public void setRoomNum(String number){
         this.roomNum = number;

@@ -27,7 +27,7 @@ import static java.lang.Math.round;
 
 
 public class indoorBoardman extends AppCompatActivity {
-    public wayPoint basementPoint1 = new wayPoint(66,540);
+   /* public wayPoint basementPoint1 = new wayPoint(66,540);
     public wayPoint basementPoint2 = new wayPoint(340, 540);
     public wayPoint basementPoint3 = new wayPoint(340, 130);
 
@@ -124,7 +124,7 @@ public class indoorBoardman extends AppCompatActivity {
     }
 
 
-
+*/
 
 }
 

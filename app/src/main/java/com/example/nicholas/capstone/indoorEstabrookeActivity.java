@@ -18,7 +18,8 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import android.graphics.Path;
 import android.util.Log;
 import java.util.List;
-
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -26,6 +27,9 @@ import java.util.HashSet;
 
 public class indoorEstabrookeActivity extends AppCompatActivity {
     public ArrayList<wayPoint> wayPointRoute = new ArrayList<wayPoint>();
+    public List<wayPoint> points;
+    public List<classroom> classes;
+    public DBHandler db;
     /*ArrayList<wayPoint> estabrookeWaypoints = new ArrayList<>();
     ArrayList<classroom> classList = new ArrayList<>();
     wayPoint estabrookePoint1 = new wayPoint(70,10);
@@ -71,10 +75,12 @@ public class indoorEstabrookeActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             draw.setBackground(getResources().getDrawable(R.drawable.estabrooke_first_floor));
         }
-        DBHandler db = new DBHandler(this);
+
+        db = new DBHandler(this);
 
         //Adding all the classrooms to the database
-        db.addClassroom(new classroom(20,60,"room152", 152));
+        //classroom Classroom = new classroom(20,60,"room152", 152);
+        db.addClassroom(new classroom(20,60,"152",152));
         db.addClassroom(new classroom(80,60,"room157", 157));
         db.addClassroom(new classroom(70,110,"room153", 153));
         db.addClassroom(new classroom(70,175,"room151", 151));
@@ -97,6 +103,50 @@ public class indoorEstabrookeActivity extends AppCompatActivity {
         db.addClassroom(new classroom(785,80,"room104", 104));
         db.addClassroom(new classroom(785,44,"room102", 102));
         db.addClassroom(new classroom(785,44,"room101", 101));
+
+
+        db.addWaypoint(new wayPoint(70, 110, 1, "point1"));
+        db.addWaypoint(new wayPoint(70, 250, 2, "point2"));
+        db.addWaypoint(new wayPoint(170, 310, 3, "point3"));
+        db.addWaypoint(new wayPoint(205, 310, 4, "point4"));
+        db.addWaypoint(new wayPoint(245, 310, 5, "point5"));
+        db.addWaypoint(new wayPoint(610, 310, 6, "point6"));
+        db.addWaypoint(new wayPoint(650, 310, 7, "point7"));
+        db.addWaypoint(new wayPoint(700, 310, 8, "point8"));
+        db.addWaypoint(new wayPoint(700, 262, 9, "point9"));
+        db.addWaypoint(new wayPoint(785, 262, 10, "point10"));
+        db.addWaypoint(new wayPoint(785, 110, 11, "point11"));
+
+        classes = (db.getAllClassrooms());
+
+        points = (db.getAllWaypoints());
+
+
+
+
+        /*for(int i = 0; i<points.size()-1; i++){
+            for(int x = 1; x<points.size(); x++){
+                if((points.get(i).getXPos() == points.get(x).getXPos()) ||
+                        (points.get(i).getYPos() == points.get(x).getYPos())){
+                    points.get(i).addConnectedWaypoint(points.get(x));
+                }
+            }
+        }
+
+        for(int i = 0; i < points.size(); i++) {
+            for (int x = 0; x < classes.size(); x++) {
+                if (points.get(x).getXPos() == classes.get(i).posX ||
+                        points.get(x).getYPos() == classes.get(i).posY){
+
+                }
+            }
+        }
+
+        points.get(0).addConnectedClassroom(classes.get(0));
+        points.get(0).addConnectedClassroom(classes.get(1));
+
+
+
 
         /*estabrookeWaypoints.add(estabrookePoint1);
         estabrookeWaypoints.add(estabrookePoint2);
@@ -150,6 +200,7 @@ public class indoorEstabrookeActivity extends AppCompatActivity {
         }
 
 */
+        //db.addWaypoint(new wayPoint(70, 110, 1, "point1"));
     }
 
     public class Draw extends View {
@@ -187,6 +238,7 @@ public class indoorEstabrookeActivity extends AppCompatActivity {
         }
 
         public void onDraw(final Canvas canv) {
+
             /*findWayPointRoute(basementPoint2,room13);
 
             for(int i = 0; i<wayPointRoute.size()-1; i++){
@@ -205,7 +257,19 @@ public class indoorEstabrookeActivity extends AppCompatActivity {
             canv.drawPoint(844, 359, mLinePaint);
 
 
-            canv.drawPoint(70, 110, strokePaint);
+            for(int x = 0; x<classes.size(); x++){
+                canv.drawPoint(classes.get(x).getXPosition(),classes.get(x).getYPosition(),mLinePaint);
+
+            }
+            for(int x = 0; x<points.size(); x++){
+                canv.drawPoint(points.get(x).getXPos(),points.get(x).getYPos(),mLinePaint);
+
+            }
+
+
+
+
+            /*canv.drawPoint(70, 110, strokePaint);
             canv.drawPoint(70, 250, strokePaint);
             canv.drawPoint(170, 310, strokePaint);
             canv.drawPoint(205, 310, strokePaint);
@@ -267,6 +331,7 @@ public class indoorEstabrookeActivity extends AppCompatActivity {
             canv.drawPoint(785, 44, mLinePaint);
 
 
+*/
 
 
         }
@@ -308,6 +373,25 @@ public class indoorEstabrookeActivity extends AppCompatActivity {
                 findWayPointRoute2(start.getConnectedPoints().get(x), end);
             }
         }
+    }
+
+    public List<wayPoint> setUpWaypoints(DBHandler db){
+        List<wayPoint> points = new ArrayList<>();
+        db.addWaypoint(new wayPoint(70, 110, 1, "point1"));
+        db.addWaypoint(new wayPoint(70, 250, 2, "point2"));
+        db.addWaypoint(new wayPoint(170, 310, 3, "point3"));
+        db.addWaypoint(new wayPoint(205, 310, 4, "point4"));
+        db.addWaypoint(new wayPoint(245, 310, 5, "point5"));
+        db.addWaypoint(new wayPoint(610, 310, 6, "point6"));
+        db.addWaypoint(new wayPoint(650, 310, 7, "point7"));
+        db.addWaypoint(new wayPoint(700, 310, 8, "point8"));
+        db.addWaypoint(new wayPoint(700, 262, 9, "point9"));
+        db.addWaypoint(new wayPoint(785, 262, 10, "point10"));
+        db.addWaypoint(new wayPoint(785, 110, 11, "point11"));
+
+        points = db.getAllWaypoints();
+
+        return points;
     }
 
 

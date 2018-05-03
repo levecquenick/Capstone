@@ -23,6 +23,7 @@ import java.util.HashSet;
 
 
 public class MainActivity extends AppCompatActivity {
+    /*
     public wayPoint basementPoint1 = new wayPoint(66,540);
     public wayPoint basementPoint2 = new wayPoint(340, 540);
     public wayPoint basementPoint3 = new wayPoint(340, 130);
@@ -82,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
         /**
          * Paint to draw circles
-         */
+
         private Paint mCirclePaint;
         Paint strokePaint;
         Paint mLinePaint;
@@ -164,6 +165,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
+*/
 
 }
