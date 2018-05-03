@@ -30,9 +30,9 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".indoorEstabrooke"
+            android:name=".indoorEstabrookeActivity"
             android:label="capstone"
-            android:screenOrientation="portrait">
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

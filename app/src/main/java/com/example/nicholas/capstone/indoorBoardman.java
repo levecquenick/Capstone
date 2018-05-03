@@ -85,8 +85,7 @@ public class indoorBoardman extends AppCompatActivity {
             if (testNetwork.contains("tempest")) {
                 distance = calculateDistance(wifiManager.getScanResults().get(i).level, wifiManager.getScanResults().get(i).frequency);
                 scanResultsClose += String.valueOf(wifiManager.getScanResults().get(i) + "\n" +
-                        convertLatLong(distance) + "\n" +
-                        distance) + "\n";
+                                               distance) + "\n";
                 x++;
             }
 

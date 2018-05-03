@@ -5,6 +5,9 @@ package com.example.nicholas.capstone;
  */
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 
 import java.io.*;
 import java.util.*;
@@ -37,11 +40,10 @@ class wayPoint{
         yPos = locY;
     }
 
-    public void addConnectedRoom(classroom room){
-        this.connectedRooms.add(room);
-    }
+
     public void addConnectedWaypoint(wayPoint point){
         this.connectedPoints.add(point);
+        point.connectedPoints.add(this);
     }
 
 
@@ -85,11 +87,27 @@ class classroom{
     float posX;
     float posY;
     String roomNum;
-    public classroom(float locX, float locY, String roomID){
+    int roomId;
+    public classroom(float locX, float locY, String number, int id){
         posX = locX;
         posY = locY;
-        roomNum = roomID;
+        roomNum = number;
+        roomId = id;
     }
+
+    public classroom(){
+
+    }
+
+    public void setRoomId(int id){
+        this.roomId = id;
+    }
+    public void setRoomNum(String number){
+        this.roomNum = number;
+    }
+
+    public void setPosX(float posX){this.posX = posX;}
+    public void setPosY(float posY){this.posY = posY;}
 
     public float getXPosition(){
         return this.posX;
@@ -98,6 +116,9 @@ class classroom{
     public float getYPosition(){
         return this.posY;
     }
+
+    public String getRoomNum(){return this.roomNum;}
+
 }
 
 

@@ -3,6 +3,7 @@ package com.example.nicholas.capstone;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,28 +21,30 @@ import static android.view.View.*;
 
 
 public class indoorEstabrooke extends AppCompatActivity {
-        String accessPoint1BSSID = "18:9c:d5:5d:b4:30";
-        String accessPoint2BSSID = "5c:a4:8a:b3:41:30";
-        String accessPoint3BSSID = "18:9c:5d:ef:b2:80";
+        String accessPoint1BSSID = "18:9c:5d:d5:b4:30";
+        String accessPoint2BSSID = "18:9c:5d:ef:b2:80";
+        String accessPoint3BSSID = "5c:a4:8a:b3:41:30";
 
-        double point1Lat = 44.89638889;
-        double point1Lng = 68.66972222;
-        double point2Lat = 44.89638889;
-        double point2Lng = 68.67;
-        double point3Lat = 44.89611111;
-        double point3Lng = 68.67;
+
+        double point1Lat = 44.89638;
+        double point1Lng = 68.66987;
+        double point2Lat = 44.89633;
+        double point2Lng = 68.66994;
+        double point3Lat = 44.89624;
+        double point3Lng = 68.67005;
 
         LatLng point1Loc = new LatLng(point1Lat,point1Lng);
         LatLng point2Loc = new LatLng(point2Lat,point2Lng);
         LatLng point3Loc = new LatLng(point3Lat,point3Lng);
 
-        double locLat;
-        double locLng;
+        double error = 0.00001;
 
         ArrayList<LatLng> point1Dist = new ArrayList<>();
         ArrayList<LatLng> point3Dist = new ArrayList<>();
         ArrayList<LatLng> point2Dist = new ArrayList<>();
         ArrayList<LatLng> userLoc = new ArrayList<LatLng>();
+        ArrayList<ScanResult> tempestOnly = new ArrayList<android.net.wifi.ScanResult>();
+
 
 
         @Override
@@ -109,43 +112,69 @@ public class indoorEstabrooke extends AppCompatActivity {
 
         double shortest = 99.0;
 
+        for(int x = 0; x <wifiManager.getScanResults().size(); x++){
+            String BSSID = String.valueOf(wifiManager.getScanResults().get(x).BSSID);
+            String SSID = String.valueOf(wifiManager.getScanResults().get(x).SSID);
 
-        for (int i = 0; i < wifiManager.getScanResults().size(); i++) {
-            distance = calculateDistance(wifiManager.getScanResults().get(i).level, wifiManager.getScanResults().get(i).frequency);
+            if(wifiManager.getScanResults().get(x).SSID.contains("tempest")){
+                tempestOnly.add(wifiManager.getScanResults().get(x));
+            }
+        }
+
+
+        for (int i = 0; i < tempestOnly.size(); i++) {
+            distance = calculateDistance(tempestOnly.get(i).level, tempestOnly.get(i).frequency);
 
 
 
-            String BSSID = String.valueOf(wifiManager.getScanResults().get(i).BSSID);
-            String SSID = String.valueOf(wifiManager.getScanResults().get(i).SSID);
-            if (BSSID.contains(accessPoint1BSSID) || BSSID.contains(accessPoint2BSSID) || BSSID.contains(accessPoint3BSSID))
+            String BSSID = String.valueOf(tempestOnly.get(i).BSSID);
+
+
+
+            if (BSSID.contains(accessPoint1BSSID))
             {
                // scanResultsClose += String.valueOf(wifiManager.getScanResults().get(i) + "\n" + distance) + "\n";
 
                 makeCircle(point1Loc, distance,point1Dist);
             }
-            if (BSSID.contains(accessPoint2BSSID))
-            {
-                // scanResultsClose += String.valueOf(wifiManager.getScanResults().get(i) + "\n" + distance) + "\n";
+            else {
+                if (BSSID.contains(accessPoint2BSSID)) {
+                    // scanResultsClose += String.valueOf(wifiManager.getScanResults().get(i) + "\n" + distance) + "\n";
 
-                makeCircle(point2Loc, distance,point2Dist);
-            }
-            if (BSSID.contains(accessPoint3BSSID))
-            {
-                // scanResultsClose += String.valueOf(wifiManager.getScanResults().get(i) + "\n" + distance) + "\n";
+                    makeCircle(point2Loc, distance, point2Dist);
+                } else {
+                    if (BSSID.contains(accessPoint3BSSID))
+                    {
+                    // scanResultsClose += String.valueOf(wifiManager.getScanResults().get(i) + "\n" + distance) + "\n";
 
-                makeCircle(point3Loc, distance,point3Dist);
+                    makeCircle(point3Loc, distance, point3Dist);
+                    }
+                }
             }
         }
 
 
+            while(userLoc.size() == 0) {
+                userLoc = getLoc(point1Dist, point2Dist, point3Dist, error);
+                error += 0.00001;
+            }
+            double totalLat = 0;
+            double totalLng = 0;
+            for(int x = 0; x<userLoc.size(); x++){
+                totalLat += userLoc.get(x).latitude;
+                totalLng += userLoc.get(x).longitude;
 
+            }
 
-        userLoc.add(getLoc(point1Dist,point2Dist,point3Dist, locLat, locLng).get(0));
+            totalLat /= userLoc.size();
+            totalLng /= userLoc.size();
         for(int i = 0; i<point1Dist.size(); i++) {
             double modifiedLat = Math.round(point1Dist.get(i).latitude *1000000.0)/1000000.0;
-            scanResultsClose += String.valueOf(modifiedLat+ "\n" + point1Dist.get(i).longitude + "\n");
+            scanResultsClose += String.valueOf(point2Dist.get(i).latitude+ " " + point2Dist.get(i).latitude+ " " + point3Dist.get(i).latitude+ "\n");
         }
-        accessPointInfo.setText(String.valueOf(userLoc.get(0)));
+        accessPointInfo.setText(String.valueOf(userLoc));
+        //accessPointInfo.setText(String.valueOf(scanResultsClose));
+
     }
 
     public void switchActivity(){
@@ -183,28 +212,32 @@ public class indoorEstabrooke extends AppCompatActivity {
         }
     }
 
-    public ArrayList<LatLng> getLoc(ArrayList<LatLng> distances1,ArrayList<LatLng> distances2,ArrayList<LatLng> distances3, double locLat, double locLng) {
+    public ArrayList<LatLng> getLoc(ArrayList<LatLng> distances1,ArrayList<LatLng> distances2,ArrayList<LatLng> distances3, double error) {
         ArrayList<LatLng> location = new ArrayList<LatLng>();
-
         for (int x = 0; x < distances1.size(); x++) {
-            double roundedLat1 = Math.round(distances1.get(x).latitude * 100000.0) / 100000.0;
-            double roundedLng1 = Math.round(distances1.get(x).longitude * 100000.0) / 100000.0;
-
             for (int i = 0; i < distances2.size(); i++) {
-                double roundedLat2 = Math.round(distances2.get(i).latitude * 100000.0) / 100000.0;
-                double roundedLng2 = Math.round(distances2.get(i).longitude * 100000.0) / 100000.0;
                 for (int a = 0; a < distances3.size(); a++) {
-                    double roundedLat3 = Math.round(distances3.get(a).latitude * 100000.0) / 100000.0;
-                    double roundedLng3 = Math.round(distances3.get(a).longitude * 100000.0) / 100000.0;
-                    if((roundedLat1 == roundedLat2 && roundedLng1 == roundedLng2)&&
-                            (roundedLat2 == roundedLat3 && roundedLng2 == roundedLng3)){
-                        location.add(distances1.get(x));
+                    double distanceError1and2Lat = Math.abs(distances1.get(x).latitude - distances2.get(i).latitude);
+                    double distanceError1and2Lng = Math.abs(distances1.get(x).longitude - distances2.get(i).longitude);
+
+                    double distanceError2and3Lat = Math.abs(distances2.get(i).latitude - distances3.get(a).latitude);
+                    double distanceError2and3Lng = Math.abs(distances2.get(i).longitude - distances3.get(a).longitude);
+
+                    if((distanceError1and2Lat <= error && distanceError2and3Lat <= error)
+                            && distanceError1and2Lng <= error && distanceError2and3Lng <= error){
+                        location.add(distances3.get(a));
+                        distances1.remove(distances1.get(x));
+                        distances2.remove(distances2.get(i));
+                        distances3.remove(distances3.get(a));
+                        break;
                     }
                 }
             }
 
         }
+
         return location;
+
 
     }
 
