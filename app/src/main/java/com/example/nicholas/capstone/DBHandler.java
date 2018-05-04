@@ -14,7 +14,7 @@ import java.util.List;
 
 public class DBHandler extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "ESTA_CLASSROOM_INFO";
+    private static final String DATABASE_NAME = "CLASSROOM_INFO";
     private static final String TABLE_CLASSROOMS = "classrooms";
     private static final String ROOM_ID = "id";
     private static final String ROOM_NUMBER = "room_number";
@@ -55,12 +55,7 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     public void addClassroom(classroom classroom){
-        System.out.println("ADD CLASSROOM");
         SQLiteDatabase db = this.getWritableDatabase();
-        if(db.isOpen()) System.out.println("DB is open.");
-        else System.out.println("DB is not open.");
-        int a = 0;
-        a++;
 
         ContentValues values = new ContentValues();
         values.put(ROOM_NUMBER, classroom.getRoomNum());
@@ -153,11 +148,6 @@ public class DBHandler extends SQLiteOpenHelper {
                 wayPoint.setxPos(cursor.getFloat(2));
                 wayPoint.setyPos(cursor.getFloat(3));
 
-               /* wayPoint.setId(cursor.getInt((cursor.getColumnIndex(WAYPOINT_ID))));
-                wayPoint.setWaypointName((cursor.getString(cursor.getColumnIndex(WAYPOINT_NAME))));
-                wayPoint.setxPos((cursor.getFloat(cursor.getColumnIndex(WAYPOINT_X_POS))));
-                wayPoint.setyPos((cursor.getFloat(cursor.getColumnIndex(WAYPOINT_Y_POS))));
-            */
                wayPoints.add(wayPoint);
             }while(cursor.moveToNext());
         }

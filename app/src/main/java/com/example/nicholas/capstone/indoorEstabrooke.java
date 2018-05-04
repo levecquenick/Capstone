@@ -19,13 +19,16 @@ import java.util.ArrayList;
 
 import static android.view.View.*;
 
-
+/*
+This class deals with the indoor localization algorithm
+ */
 public class indoorEstabrooke extends AppCompatActivity {
+        //the 3 wifi access point BSSIDs used to get signal
         String accessPoint1BSSID = "18:9c:5d:d5:b4:30";
         String accessPoint2BSSID = "18:9c:5d:ef:b2:80";
         String accessPoint3BSSID = "5c:a4:8a:b3:41:30";
 
-
+        //the lat and lng of each access point
         double point1Lat = 44.89638;
         double point1Lng = 68.66987;
         double point2Lat = 44.89633;
@@ -33,16 +36,20 @@ public class indoorEstabrooke extends AppCompatActivity {
         double point3Lat = 44.89624;
         double point3Lng = 68.67005;
 
+        //make em latlng points cuz why not
         LatLng point1Loc = new LatLng(point1Lat,point1Lng);
         LatLng point2Loc = new LatLng(point2Lat,point2Lng);
         LatLng point3Loc = new LatLng(point3Lat,point3Lng);
 
+        //for triangulation purposes
         double error = 0.00001;
 
+        //array lists to hold possible locations for user
         ArrayList<LatLng> point1Dist = new ArrayList<>();
         ArrayList<LatLng> point3Dist = new ArrayList<>();
         ArrayList<LatLng> point2Dist = new ArrayList<>();
         ArrayList<LatLng> userLoc = new ArrayList<LatLng>();
+        //I only deal with tempest networks
         ArrayList<ScanResult> tempestOnly = new ArrayList<android.net.wifi.ScanResult>();
 
 
@@ -58,20 +65,21 @@ public class indoorEstabrooke extends AppCompatActivity {
             TextView accessPointInfo = (TextView) findViewById(R.id.textView);
 
 
-
+            //I put everything in this method so it would update when I hit the button
             setUpEverything();
 
 
         }
 
 
-
+    //calculates the distance from a wifi access point
     public double calculateDistance(double signalLevelInDb, double freqInMHz) {
         double exp = (27.55 - (20 * Math.log10(freqInMHz)) + Math.abs(signalLevelInDb)) / 20.0;
         return Math.pow(10.0, exp);
     }
 
-
+    //this bad boy does everything, it would normally be in the onCreate method but i want it to
+    //update when i hit a button so I threw it into a method
     public void setUpEverything(){
         WifiManager wifiManager = (WifiManager) getApplicationContext()
                 .getSystemService(Context.WIFI_SERVICE);
@@ -89,7 +97,7 @@ public class indoorEstabrooke extends AppCompatActivity {
                 wifiManager.getScanResults();
             }
         }
-
+        //update button
         updateDistances.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,7 +105,7 @@ public class indoorEstabrooke extends AppCompatActivity {
                 setUpEverything();
             }
         });
-
+        //early tests to switch between activities
         switchActivity.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -187,13 +195,18 @@ public class indoorEstabrooke extends AppCompatActivity {
         return latLong;
     }
 
-    private void makeCircle(LatLng centre, double radius, ArrayList<LatLng> points)
+    /*
+    uses the radius and the latLng of the center to find a series of points in a circle around
+    the center
+    the center is the location of a wifi access point
+     */
+    private void makeCircle(LatLng center, double radius, ArrayList<LatLng> points)
     {
 
         double EARTH_RADIUS = 6378100.0;
         // Convert to radians.
-        double lat = centre.latitude * Math.PI / 180.0;
-        double lon = centre.longitude * Math.PI / 180.0;
+        double lat = center.latitude * Math.PI / 180.0;
+        double lon = center.longitude * Math.PI / 180.0;
 
         for (double t = 0; t <= Math.PI * 2; t += 0.13)
         {
@@ -206,12 +219,17 @@ public class indoorEstabrooke extends AppCompatActivity {
             LatLng point =new LatLng(latPoint * 180.0 / Math.PI, lonPoint * 180.0 / Math.PI);
 
 
-            // now here note that same point(lat/lng) is used for marker as well as saved in the ArrayList
             points.add(point);
 
         }
     }
 
+    /*this method compares 3 arraylists against each other
+    if the same lat and long is in all three lists then that is the user's location
+    if the same isn't in all three lists it finds the difference between both lat and long and compares
+    it to the margin for error variable above. if the error is larger than the difference it considers them
+    the same
+    */
     public ArrayList<LatLng> getLoc(ArrayList<LatLng> distances1,ArrayList<LatLng> distances2,ArrayList<LatLng> distances3, double error) {
         ArrayList<LatLng> location = new ArrayList<LatLng>();
         for (int x = 0; x < distances1.size(); x++) {
@@ -240,12 +258,6 @@ public class indoorEstabrooke extends AppCompatActivity {
 
 
     }
-
-
-
-
-
-
 
     }
 

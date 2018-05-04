@@ -13,7 +13,7 @@ import java.io.*;
 import java.util.*;
 
 import static java.lang.Integer.compare;
-public class newIndoorAlgorithm {
+public class indoorWayPointInfo {
 
 
 }
@@ -135,7 +135,11 @@ class classroom{
         roomId = id;
     }
 
-    public classroom(){
+    public classroom(classroom aClass){
+
+    }
+
+    public classroom() {
 
     }
 

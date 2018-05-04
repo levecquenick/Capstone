@@ -39,6 +39,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".estabrooke_nav_start_screen"></activity>
     </application>
 
 </manifest>
